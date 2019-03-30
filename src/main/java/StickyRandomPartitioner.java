@@ -6,9 +6,11 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class StickyRandomPartitioner implements Partitioner {
   Long stickTime;
@@ -74,6 +76,9 @@ public class StickyRandomPartitioner implements Partitioner {
    * TODO implement
    */
   public void configure(Map<String, ?> configs) {
+    TemporalUnit timeUnit = ChronoUnit.valueOf(configs.get("stickyRandomPartitioner.timeUnit").toString());
+    setTimeUnit(timeUnit);
 
+    setStickTime(Long.valueOf(configs.get("stickyRandomPartitioner.stickTime").toString()));
   }
 }

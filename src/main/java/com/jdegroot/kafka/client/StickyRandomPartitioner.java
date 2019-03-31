@@ -1,18 +1,19 @@
+package com.jdegroot.kafka.client;
+
 import com.google.common.base.Preconditions;
 import org.apache.kafka.clients.producer.Partitioner;
 import org.apache.kafka.common.Cluster;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class StickyRandomPartitioner implements Partitioner {
+  public static final String CONFIG_PREFIX = "stickyRandomPartitioner";
   Long stickTime;
   TemporalUnit timeUnit;
   Clock clock;
@@ -30,7 +31,7 @@ public class StickyRandomPartitioner implements Partitioner {
    * @param timeUnit
    * @param clock
    */
-  public StickyRandomPartitioner(Long stickTime, TemporalUnit timeUnit, Clock clock) {
+   StickyRandomPartitioner(Long stickTime, TemporalUnit timeUnit, Clock clock) {
     setStickTime(stickTime);
     setTimeUnit(timeUnit);
     this.clock = clock;
@@ -76,9 +77,9 @@ public class StickyRandomPartitioner implements Partitioner {
    * TODO implement
    */
   public void configure(Map<String, ?> configs) {
-    TemporalUnit timeUnit = ChronoUnit.valueOf(configs.get("stickyRandomPartitioner.timeUnit").toString());
+    TemporalUnit timeUnit = ChronoUnit.valueOf(configs.get(CONFIG_PREFIX + ".timeUnit").toString());
     setTimeUnit(timeUnit);
 
-    setStickTime(Long.valueOf(configs.get("stickyRandomPartitioner.stickTime").toString()));
+    setStickTime(Long.valueOf(configs.get(CONFIG_PREFIX + ".stickTime").toString()));
   }
 }
